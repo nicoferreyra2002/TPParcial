@@ -29,6 +29,15 @@ namespace TPParcial
             reservaForm.ShowDialog();
         }
 
+        // --- Consulta de Reservas ---
+        private void MenuItemConsultaReservas_Click(object sender, EventArgs e)
+        {
+            // Usar el mismo repositorio para ver las reservas cargadas en la sesión
+            ReservaController controller = new ReservaController(_repoReserva);
+            ConsultaReservaForm consultaForm = new ConsultaReservaForm(controller);
+            consultaForm.ShowDialog();
+        }
+
         // --- Gestión de Laboratorios ---
         private void MenuItemGestionLaboratorios_Click(object sender, EventArgs e)
         {
