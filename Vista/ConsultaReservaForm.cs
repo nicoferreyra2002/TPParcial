@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Controladores;
+using TPParcial.Modelo;
 
 namespace TPParcial
 {

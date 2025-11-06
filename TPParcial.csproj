@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -50,6 +51,7 @@
     <Compile Include="Controlador\ReporteController.cs" />
     <Compile Include="Controlador\ReservaController.cs" />
     <Compile Include="Modelo\Excepciones.cs" />
+    <Compile Include="Modelo\Exceptions.cs" />
     <Compile Include="Modelo\IRepositorio.cs" />
     <Compile Include="Modelo\Laboratorio.cs" />
     <Compile Include="Modelo\ManejadorPersistencia.cs" />
@@ -106,6 +108,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="sql\sql_CreateLabReservasDB.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

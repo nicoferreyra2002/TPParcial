@@ -1,4 +1,5 @@
 ﻿using System;
+using TPParcial.Modelo;
 
 public class ReservaCuatrimestral : Reserva
 {

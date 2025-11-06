@@ -1,57 +1,47 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-// Requisito: Implementar repositorios
-public class RepositorioLaboratorio : IRepositorio<Laboratorio>
+namespace TPParcial.Modelo
 {
-    private List<Laboratorio> _laboratorios = new List<Laboratorio>();
-    private int _nextId = 1;
-
-    // Dependencia: Necesitas una referencia al repositorio de reservas
-    private RepositorioReserva _repositorioReserva;
-
-    public RepositorioLaboratorio(RepositorioReserva repoReserva)
+    public class RepositorioLaboratorio : IRepositorio<Laboratorio>
     {
-        _repositorioReserva = repoReserva;
-        // Opcional: Cargar los 6 laboratorios iniciales aquí.
-    }
+        private List<Laboratorio> _laboratorios = new List<Laboratorio>();
+        private int _nextId = 1;
+        private RepositorioReserva _repositorioReserva;
 
-    public void Agregar(Laboratorio lab)
-    {
-        lab.NumeroAsignado = _nextId++;
-        _laboratorios.Add(lab);
-        // Aquí iría la llamada a ManejadorPersistencia si volcamos a DB
-    }
-
-    public void Eliminar(int id)
-    {
-        // Requisito: NO se podrá eliminar un laboratorio si tiene reservas asignadas.
-        var reservasAsignadas = _repositorioReserva.ObtenerPorLaboratorio(id);
-
-        if (reservasAsignadas.Any())
+        public RepositorioLaboratorio(RepositorioReserva repoReserva)
         {
-            // Requisito: advertir que se perderán las reservas (listarlas)
-            string detalles = string.Join(", ", reservasAsignadas.Select(r => r.Asignatura));
-            throw new LaboratorioReservadoException($"El laboratorio {id} no puede eliminarse. Tiene reservas asignadas: {detalles}");
+            _repositorioReserva = repoReserva ?? throw new ArgumentNullException(nameof(repoReserva));
         }
 
-        var lab = ObtenerPorId(id);
-        if (lab != null)
+        public void Agregar(Laboratorio lab)
         {
+            lab.NumeroAsignado = _nextId++;
+            _laboratorios.Add(lab);
+        }
+
+        public void Eliminar(int id)
+        {
+            var reservas = _repositorioReserva.ObtenerPorLaboratorio(id);
+            if (reservas != null && reservas.Count > 0)
+                throw new InvalidOperationException("No se puede eliminar el laboratorio: existen reservas asignadas.");
+
+            var lab = ObtenerPorId(id);
+            if (lab == null) throw new KeyNotFoundException($"Laboratorio {id} no encontrado.");
             _laboratorios.Remove(lab);
         }
-        else
+
+        public List<Laboratorio> ObtenerTodos() => _laboratorios;
+
+        public void Modificar(Laboratorio entidad)
         {
-            throw new KeyNotFoundException($"Laboratorio con ID {id} no encontrado.");
+            var existing = ObtenerPorId(entidad.NumeroAsignado);
+            if (existing == null) throw new KeyNotFoundException($"Laboratorio {entidad.NumeroAsignado} no encontrado.");
+            existing.UbicacionPiso = entidad.UbicacionPiso;
+            existing.CapacidadPuestos = entidad.CapacidadPuestos;
         }
-    }
 
-    public List<Laboratorio> ObtenerTodos()
-    {
-        return _laboratorios;
+        public Laboratorio ObtenerPorId(int id) => _laboratorios.FirstOrDefault(l => l.NumeroAsignado == id);
     }
-
-    // Implementa el resto de los métodos (Modificar, ObtenerPorId)
-    public void Modificar(Laboratorio entidad) { /* Lógica de modificación */ }
-    public Laboratorio ObtenerPorId(int id) { return _laboratorios.FirstOrDefault(l => l.NumeroAsignado == id); }
 }

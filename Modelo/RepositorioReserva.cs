@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TPParcial.Modelo;
 
 // Corregido: Debe ser una CLASE, no una INTERFAZ
 public class RepositorioReserva : IRepositorio<Reserva>

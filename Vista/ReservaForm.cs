@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using Controladores; // Necesario para usar el Controller
+using Controladores;
+using TPParcial.Modelo; // Necesario para usar el Controller
 
 namespace TPParcial
 {

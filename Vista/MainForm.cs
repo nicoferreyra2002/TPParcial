@@ -1,6 +1,7 @@
 ﻿using Controladores;
 using System;
 using System.Windows.Forms;
+using TPParcial.Modelo;
 
 namespace TPParcial
 {
